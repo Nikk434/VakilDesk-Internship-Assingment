@@ -2,6 +2,7 @@ import requests
 import json
 import os
 import pymongo
+from dotenv import load_dotenv
 
 # Function to save HTML content to a file with exception handling
 def fileSave(url, path):
@@ -65,7 +66,14 @@ except OSError as e:
 
 # Function to save scraped data in mongobd 
 def storeIN_mongodb():
-    client = pymongo.MongoClient("mongodb+srv://admin_nik:admin_nik_434@cluster0.9za85np.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+    username = os.getenv("MONGODB_USERNAME")
+    password = os.getenv("MONGODB_PASSWORD")
+    cluster_url = os.getenv("MONGODB_CLUSTER_URL")
+
+# Construct the MongoDB URI
+    mongo_uri = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority"
+
+    client = pymongo.MongoClient(mongo_uri)
     db = client["Vakildesk_internship"]
     collection = db["films_scraped_data"]
 
