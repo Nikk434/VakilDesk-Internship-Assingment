@@ -1,6 +1,7 @@
 import requests
 import json
 import os
+import pymongo
 
 # Function to save HTML content to a file with exception handling
 def fileSave(url, path):
@@ -61,3 +62,31 @@ try:
     print(f"All data saved successfully to {output_file_path}")
 except OSError as e:
     print(f"An error occurred while writing to the JSON file: {e}")
+
+# Function to save scraped data in mongobd 
+def storeIN_mongodb():
+    client = pymongo.MongoClient("mongodb+srv://admin_nik:admin_nik_434@cluster0.9za85np.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0")
+    db = client["Vakildesk_internship"]
+    collection = db["films_scraped_data"]
+
+    file_path = r'D:\VakilDesk\output_1\films_data\all_films.json'
+
+    try:
+        with open(file_path, 'r') as file:
+            file_data = json.load(file)
+
+        if isinstance(file_data, list):
+            collection.insert_many(file_data)
+        else:
+            collection.insert_one(file_data)
+
+        print("Data inserted successfully")
+
+    except FileNotFoundError:
+        print(f"The file at {file_path} was not found.")
+    except json.JSONDecodeError:
+        print(f"Error decoding JSON from the file at {file_path}.")
+    except pymongo.errors.PyMongoError as e:
+        print(f"An error occurred while inserting data into MongoDB: {e}")
+
+storeIN_mongodb()
