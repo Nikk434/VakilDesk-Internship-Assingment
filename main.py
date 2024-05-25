@@ -3,6 +3,7 @@ import json
 import os
 import pymongo
 from dotenv import load_dotenv
+load_dotenv("D:\VakilDesk\cred\.env")
 
 # Function to save HTML content to a file with exception handling
 def fileSave(url, path):
@@ -32,13 +33,13 @@ def fetch_film_data(url):
         print(f"Failed to retrieve data from {url}: {e}")
         return None
 
-html_url = "https://www.scrapethissite.com/pages/ajax-javascript/#2010"
+html_url = "https://www.scrapethissite.com/pages/ajax-javascript/#2010" #url for static content 
 html_path = 'output_1/op.html'
 fileSave(html_url, html_path)
 
 # Define the years 
 years = [2010, 2011, 2012, 2013, 2014, 2015]
-base_url = "https://www.scrapethissite.com/pages/ajax-javascript/?ajax=true&year="
+base_url = "https://www.scrapethissite.com/pages/ajax-javascript/?ajax=true&year=" #url for dynamic content 
 
 # Ensure the output directory exists for film data
 output_dir = 'output_1/films_data'
@@ -70,7 +71,6 @@ def storeIN_mongodb():
     password = os.getenv("MONGODB_PASSWORD")
     cluster_url = os.getenv("MONGODB_CLUSTER_URL")
 
-    load_dotenv()
 
     # Construct the MongoDB URI
     mongo_uri = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority"
