@@ -70,7 +70,9 @@ def storeIN_mongodb():
     password = os.getenv("MONGODB_PASSWORD")
     cluster_url = os.getenv("MONGODB_CLUSTER_URL")
 
-# Construct the MongoDB URI
+    load_dotenv()
+
+    # Construct the MongoDB URI
     mongo_uri = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority"
 
     client = pymongo.MongoClient(mongo_uri)
