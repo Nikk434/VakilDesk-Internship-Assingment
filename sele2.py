@@ -1,49 +1,59 @@
 from bs4 import BeautifulSoup
 import os
+import pymongo
+from dotenv import load_dotenv
 
+# Load environment variables from the .env file
+load_dotenv("D:\VakilDesk\cred\.env")
+
+# Read the HTML file
 file_path = "D:\VakilDesk\output_2\page_1.html"
-with open(file_path,"r") as f:
+with open(file_path, "r", encoding="utf-8") as f:
     html_doc = f.read()
 
+# Parse the HTML document with BeautifulSoup
 soup = BeautifulSoup(html_doc, 'html.parser')
-title = soup.title.string
-#title
-print(title)
-#nav elements
-nav = soup.find_all(class_="nav-link")
-for link in nav:
-    print(link.get_text())
 
-#page_title
+# Extract title
+title = soup.title.string
+print(title)
+
+# Extract nav elements
+nav = soup.find_all(class_="nav-link")
+nav_links = [link.get_text() for link in nav]
+for link in nav_links:
+    print(link)
+
+# Extract page title
 page_title = soup.h1.get_text()
 print(page_title)
 
-#lead
+# Extract lead
 lead = soup.find(class_="lead").string
 print(lead)
 
-#get specific paragraph text and link 
+# Extract specific paragraph text and link from col-md-6 div
 col_md_6 = soup.find('div', class_='col-md-6')
 p_tag = col_md_6.find('p')
-p_text = p_tag.get_text()
+p_text_col_md_6 = p_tag.get_text(strip=True)
 a_tag = p_tag.find('a')
-a_text = a_tag.get_text()
+a_text_col_md_6 = a_tag.get_text(strip=True)
 
-print(f"Paragraph text: {p_text}")
-print(f"Link text: {a_text}")
+print(f"Paragraph text: {p_text_col_md_6}")
+print(f"Link text: {a_text_col_md_6}")
 
-#get specific paragraph text and link 
+# Extract specific paragraph text and link from text-right div
 text_right = soup.find('div', class_="text-right")
 p_tag = text_right.find('p')
-p_text = p_tag.get_text()
+p_text_text_right = p_tag.get_text(strip=True)
 a_tag = p_tag.find('a')
-a_href = a_tag.get_text()
+a_href_text_right = a_tag.get('href')
 
-print(f"Paragraph text: {p_text}")
-print(f"Link href: {a_href}")
+print(f"Paragraph text: {p_text_text_right}")
+print(f"Link href: {a_href_text_right}")
 
-#get all team data 
-data = []
+# Extract all team data from the table
+team_data_list = []
 table = soup.find('table', class_='table')
 # Iterate over each row in the table, skipping the header
 for row in table.find_all('tr')[1:]:
@@ -59,8 +69,42 @@ for row in table.find_all('tr')[1:]:
         'Goals Against (GA)': cells[7].get_text(strip=True),
         '+ / -': cells[8].get_text(strip=True)
     }
-    data.append(team_data)
+    team_data_list.append(team_data)
 
-# Print the data
-for item in data:
+# Print the team data
+for item in team_data_list:
     print(item)
+
+# Load MongoDB credentials from environment variables
+username = os.getenv("MONGODB_USERNAME")
+password = os.getenv("MONGODB_PASSWORD")
+cluster_url = os.getenv("MONGODB_CLUSTER_URL")
+
+# Construct the MongoDB URI
+mongo_uri = f"mongodb+srv://{username}:{password}@{cluster_url}/?retryWrites=true&w=majority"
+client = pymongo.MongoClient(mongo_uri)
+
+# Select the database and collection
+db = client["Vakildesk_internship"]
+collection = db["hockey_scraped_data"]
+
+# Consolidate all the extracted data into a single dictionary
+data_to_insert = {
+    'title': title,
+    'nav_links': nav_links,
+    'page_title': page_title,
+    'lead': lead,
+    'paragraph_col_md_6': {
+        'text': p_text_col_md_6,
+        'link_text': a_text_col_md_6,
+    },
+    'paragraph_text_right': {
+        'text': p_text_text_right,
+        'link_href': a_href_text_right,
+    },
+    'team_data': team_data_list
+}
+
+# Insert the consolidated data into MongoDB
+collection.insert_one(data_to_insert)
+print("Data successfully inserted into MongoDB!")
