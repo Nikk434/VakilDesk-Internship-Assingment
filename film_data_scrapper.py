@@ -34,7 +34,6 @@ try:
     client = pymongo.MongoClient(mongo_uri)
 except Exception as e:
     print(f"Error connecting to MongoDB: {e}")
-    # Handle the error here, maybe exit the program or try an alternative approach
 
 try:
     db = client["Vakildesk_internship"]
