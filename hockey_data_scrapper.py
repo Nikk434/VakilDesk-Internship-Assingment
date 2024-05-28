@@ -119,7 +119,7 @@ try:
                 all_data_to_insert.append(data_to_insert)
 except Exception as e:
     print(f"Error processing files: {e}")
-
+    
 try:
     if all_data_to_insert:
         collection.insert_many(all_data_to_insert)
