@@ -14,7 +14,6 @@ try:
         html_doc = f.read()
 except Exception as e:
     print(f"Error reading HTML file: {e}")
-    # Handle the error here, maybe exit the program or try an alternative approach
 
 try:
     soup = BeautifulSoup(html_doc, 'html.parser')
@@ -22,7 +21,6 @@ try:
     text = all_content.strip(string.whitespace)
 except Exception as e:
     print(f"Error processing HTML content: {e}")
-    # Handle the error here, maybe exit the program or try an alternative approach
 
 try:
     username = os.getenv("MONGODB_USERNAME")
@@ -48,4 +46,3 @@ try:
     print("Content stored in MongoDB successfully.")
 except Exception as e:
     print(f"Error storing content in MongoDB: {e}")
-    # Handle the error here, maybe exit the program or try an alternative approach
