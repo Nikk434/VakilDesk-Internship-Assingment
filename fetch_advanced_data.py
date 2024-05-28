@@ -62,16 +62,11 @@ from selenium.webdriver.chrome.service import Service
 from selenium.webdriver.common.by import By
 
 # Set the path to your Chrome WebDriver executable
-# webdriver_path = '/path/to/chromedriver'  # Update this with the path to your chromedriver executable
 url = 'https://www.scrapethissite.com/pages/advanced/?'
 driver = webdriver.Chrome()
 
-
-
-# Navigate to the URL
 driver.get(url)
 content = driver.page_source
-# print(content)
 
 with open('content.html', 'w', encoding='utf-8') as file:
     file.write(content)
@@ -85,7 +80,7 @@ time.sleep(2)
 # Get the handles of all open tabs
 handles = driver.window_handles
 
-# Switch to the new tab (the second tab)
+# Switch to the new tab 
 driver.switch_to.window(handles[1])
 
 spoofing_headers_content = driver.page_source
@@ -98,7 +93,6 @@ with open('spoofing_headers_content.html', 'w', encoding='utf-8') as file:
     print(f"spoofing_headers_content saved sucessfully!")
 
 # # Close the browser
-# Switch to the new tab (the second tab)
 driver.switch_to.window(handles[0])
 time.sleep(2)
 
@@ -108,13 +102,10 @@ time.sleep(2)
 
 handles = driver.window_handles
 
-# Switch to the new tab (the second tab)
 driver.switch_to.window(handles[2])
 
-# Get the handles of all open tabs
 login_content = driver.page_source
 
-# Perform actions in the new tab
 print("New tab URL:", driver.current_url)
 
 # # Write the content to a file
@@ -132,13 +123,10 @@ time.sleep(2)
 
 handles = driver.window_handles
 
-# Switch to the new tab (the second tab)
 driver.switch_to.window(handles[3])
 
-# Get the handles of all open tabs
 csrf_content = driver.page_source
 
-# Perform actions in the new tab
 print("New tab URL:", driver.current_url)
 
 # # Write the content to a file
