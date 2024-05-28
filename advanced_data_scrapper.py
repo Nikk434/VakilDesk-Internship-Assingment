@@ -72,7 +72,6 @@ all_data_to_insert.append(parse_main_content('content.html'))
 all_data_to_insert.append(parse_spoofing_headers_content('spoofing_headers_content.html'))
 all_data_to_insert.append(parse_login_content('login_content.html'))
 all_data_to_insert.append(parse_csrf_content('csrf_content.html'))
-
 # Insert data into MongoDB
 try:
     if all_data_to_insert:
