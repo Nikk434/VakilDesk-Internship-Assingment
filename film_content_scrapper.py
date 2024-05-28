@@ -41,7 +41,6 @@ fileSave(html_url, html_path)
 years = [2010, 2011, 2012, 2013, 2014, 2015]
 base_url = "https://www.scrapethissite.com/pages/ajax-javascript/?ajax=true&year=" #url for dynamic content 
 
-# Ensure the output directory exists for film data
 output_dir = 'output_1/films_data'
 os.makedirs(output_dir, exist_ok=True)
 
