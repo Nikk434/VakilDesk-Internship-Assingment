@@ -2,15 +2,14 @@ import os
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 
-# Replace 'url' with the URL of the website you want to visit
 url_template = 'https://www.scrapethissite.com/pages/forms/?page_num={}'
 
 # Initialize the Chrome webdriver
 driver = webdriver.Chrome()
 
-# Function to get all links on a page
-def get_links():
-    return driver.find_elements(By.TAG_NAME, 'a')
+# # Function to get all links on a page
+# def get_links():
+#     return driver.find_elements(By.TAG_NAME, 'a')
 
 # Function to save HTML content to a file
 def save_html_content(content, folder_path, file_name):
@@ -43,7 +42,6 @@ def visit_pages(page_numbers):
             print("Error visiting page:", page_number)
             print(e)
 
-# Define the range of page numbers you want to visit
 start_page = 1
 end_page = 24
 page_numbers = range(start_page, end_page + 1)
